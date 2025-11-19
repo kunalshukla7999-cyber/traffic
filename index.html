@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Speed Monitor</title>
+    <style>
+        /* Basic CSS Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        #input-form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #input-form input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #results-container {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+        .result-item {
+            padding: 8px 0;
+            border-bottom: 1px dotted #eee;
+        }
+        .safe { color: green; }
+        .moderate { color: orange; }
+        .severe { color: red; font-weight: bold; }
+        #total-penalty {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background-color: #ffe5e5;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚔 Vehicle Speed Monitor</h1>
+
+    <div id="input-form">
+        <p>Enter the speeds of 8 vehicles below (km/h):</p>
+        </div>
+
+    <button onclick="calculatePenalties()">Calculate Penalties</button>
+
+    <div id="results-container">
+        <h2>Assessment Results</h2>
+        <div id="assessment-details"></div>
+        <div id="total-penalty">Total Penalty Points: 0</div>
+    </div>
+</div>
+
+<script>
+    // --- 1. Constants (Matching C code logic) ---
+    const NUM_VEHICLES = 8;
+    const SPEED_LIMIT_SAFE = 60;
+    const SPEED_LIMIT_MODERATE = 99;
+    const PENALTY_MODERATE = 2;
+    const PENALTY_HIGH = 5;
+
+    // --- 2. Dynamic Input Generation ---
+    function generateInputs() {
+        const formDiv = document.getElementById('input-form');
+        let html = '';
+        for (let i = 0; i < NUM_VEHICLES; i++) {
+            html += `
+                <label for="speed-${i}">Vehicle ${i + 1} Speed:</label>
+                <input type="number" id="speed-${i}" value="0" min="0">
+            `;
+        }
+        formDiv.innerHTML += html;
+    }
+
+    // --- 3. Calculation Logic ---
+    function calculatePenalties() {
+        let totalPenalty = 0;
+        const detailsDiv = document.getElementById('assessment-details');
+        detailsDiv.innerHTML = ''; // Clear previous results
+
+        for (let i = 0; i < NUM_VEHICLES; i++) {
+            const inputElement = document.getElementById(`speed-${i}`);
+            // Use parseInt to convert string input to integer
+            const currentSpeed = parseInt(inputElement.value); 
+            let message = '';
+            let penalty = 0;
+            let cssClass = '';
+
+            // Input Validation and Data Check
+            if (isNaN(currentSpeed) || currentSpeed < 0) {
+                message = "❌ Invalid input. Must be non-negative number.";
+                cssClass = 'severe';
+            }
+            // Penalty Logic (Same as C code)
+            else if (currentSpeed < SPEED_LIMIT_SAFE) {
+                penalty = 0;
+                message = `✅ SAFE LIMIT. Drive safe.`;
+                cssClass = 'safe';
+            } else if (currentSpeed < SPEED_LIMIT_MODERATE) {
+                penalty = PENALTY_MODERATE;
+                message = ⚠️ MODERATE VIOLATION! (+${penalty} points). Slow the vehicle.`;
