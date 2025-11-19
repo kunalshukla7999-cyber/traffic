@@ -80,7 +80,7 @@
 <body>
 
 <div class="container">
-    <h1>🚔 Vehicle Speed Monitor</h1>
+    <h1> Vehicle Speed Monitor</h1>
 
     <div id="input-form">
         <p>Enter the speeds of 8 vehicles below (km/h):</p>
@@ -142,4 +142,5 @@
                 cssClass = 'safe';
             } else if (currentSpeed < SPEED_LIMIT_MODERATE) {
                 penalty = PENALTY_MODERATE;
+
                 message = ⚠️ MODERATE VIOLATION! (+${penalty} points). Slow the vehicle.`;
